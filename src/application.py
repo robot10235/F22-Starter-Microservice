@@ -3,6 +3,7 @@ from datetime import datetime
 import json
 from columbia_student_resource import ColumbiaStudentResource
 from flask_cors import CORS
+import rest_utils
 
 # Create the Flask application object.
 app = Flask(__name__,
@@ -28,27 +29,45 @@ def get_health():
     return result
 
 
-@app.route("/api/students/<uni>", methods=["GET"])
+@app.route("/api/students/<uni>", methods=["GET", "PUT", "DELETE"])
 def get_student_by_uni(uni):
-
-    result = ColumbiaStudentResource.get_by_key(uni)
-    if result:
-        rsp = Response(json.dumps(result), status=200, content_type="application.json")
+    if request.method == "GET":
+        result = ColumbiaStudentResource.get_by_key(uni)
+        if result:
+            rsp = Response(json.dumps(result), status=200, content_type="application.json")
+        else:
+            rsp = Response("NOT FOUND", status=404, content_type="text/plain")
+    elif request.method == "PUT":
+        data = request.get_json()
+        result = ColumbiaStudentResource.update_by_key(uni, data)
+        if result > 0:
+            rsp = Response("Update OK", status=200, content_type="application.json")
+        else:
+            rsp = Response("NOT FOUND", status=404, content_type="text/plain")
     else:
-        rsp = Response("NOT FOUND", status=404, content_type="text/plain")
-
+        result = ColumbiaStudentResource.delete_by_key(uni)
+        if result > 0:
+            rsp = Response("DELETE OK", status=200, content_type="application.json")
+        else:
+            rsp = Response("NOT FOUND", status=404, content_type="text/plain")
     return rsp
 
 
-@app.route("/api/students", methods=["GET"])
+@app.route("/api/students", methods=["GET", "POST"])
 def get_student():
-
-    result = ColumbiaStudentResource.get_all()
-    if result:
-        rsp = Response(json.dumps(result), status=200, content_type="application.json")
-    else:
-        rsp = Response("NOT FOUND", status=404, content_type="text/plain")
-
+    if request.method == "GET":
+        result = ColumbiaStudentResource.get_all()
+        if result:
+            rsp = Response(json.dumps(result), status=200, content_type="application.json")
+        else:
+            rsp = Response("NOT FOUND", status=404, content_type="text/plain")
+    elif request.method == "POST":
+        data = request.get_json()
+        result = ColumbiaStudentResource.add_one(data)
+        if result > 0:
+            rsp = Response("INSERT OK", status=200, content_type="application.json")
+        else:
+            rsp = Response("NOT FOUND", status=404, content_type="text/plain")
     return rsp
 
 
