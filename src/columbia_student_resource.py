@@ -19,6 +19,10 @@ class ColumbiaStudentResource:
             user=usr,
             password=pw,
             host=h,
+            # user="root",
+            # password="123456",
+            # host="localhost",
+            port=3306,
             cursorclass=pymysql.cursors.DictCursor,
             autocommit=True
         )
@@ -27,11 +31,20 @@ class ColumbiaStudentResource:
     @staticmethod
     def get_by_key(key):
 
-        sql = "SELECT * FROM f22_databases.columbia_students where guid=%s";
+        sql = "SELECT * FROM f22_databases.columbia_students where guid=%s;"
         conn = ColumbiaStudentResource._get_connection()
         cur = conn.cursor()
         res = cur.execute(sql, args=key)
         result = cur.fetchone()
 
+        return result
+
+    @staticmethod
+    def get_all():
+        sql = "SELECT * FROM f22_databases.columbia_students;"
+        conn = ColumbiaStudentResource._get_connection()
+        cur = conn.cursor()
+        res = cur.execute(sql)
+        result = cur.fetchone()
         return result
 
