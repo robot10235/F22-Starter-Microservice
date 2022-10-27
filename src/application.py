@@ -3,7 +3,6 @@ from datetime import datetime
 import json
 from columbia_student_resource import ColumbiaStudentResource
 from flask_cors import CORS
-import rest_utils
 
 # Create the Flask application object.
 app = Flask(__name__,
