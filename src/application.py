@@ -70,13 +70,14 @@ def get_student():
     return rsp
 
 
-@app.route("/api/students/<page_num>", methods=["GET"])
-def get_student(page_num):
+@app.route("/api/students/page/<page_num>", methods=["GET"])
+def get_pages(page_num):
     result = ColumbiaStudentResource.get_page(page_num)
     if result:
         rsp = Response(json.dumps(result), status=200, content_type="application.json")
     else:
         rsp = Response("NOT FOUND", status=404, content_type="text/plain")
+    return rsp
 
 
 if __name__ == "__main__":
