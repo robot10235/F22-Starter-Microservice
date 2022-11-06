@@ -39,12 +39,13 @@ class ColumbiaStudentResource:
         return result
 
     @staticmethod
-    def get_all():
-        sql = "SELECT * FROM f22_databases.columbia_students;"
+    def get_page(page_num):
+        offset = (page_num-1)*10
+        sql = "SELECT * FROM f22_databases.columbia_students LIMIT=10 OFFSET={%s};"
         conn = ColumbiaStudentResource._get_connection()
         cur = conn.cursor()
         res = cur.execute(sql)
-        result = cur.fetchall()
+        result = cur.fetchall(args=str(offset))
         conn.commit()
         conn.close()
         return result
