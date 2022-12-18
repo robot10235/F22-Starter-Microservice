@@ -36,20 +36,13 @@ def get_student_by_uni(uni):
             rsp = Response(json.dumps(result), status=200, content_type="application.json")
         else:
             rsp = Response("NOT FOUND", status=404, content_type="text/plain")
-    elif request.method == "POST":
+    elif request.method == "PUT":
         data = request.get_json()
-        result = ColumbiaStudentResource.add_one(data)
+        result = ColumbiaStudentResource.update_by_key(uni, data)
         if result > 0:
-            rsp = Response("INSERT OK", status=200, content_type="application.json")
+            rsp = Response("Update OK", status=200, content_type="application.json")
         else:
             rsp = Response("NOT FOUND", status=404, content_type="text/plain")
-    # elif request.method == "PUT":
-    #     data = request.get_json()
-    #     result = ColumbiaStudentResource.update_by_key(uni, data)
-    #     if result > 0:
-    #         rsp = Response("Update OK", status=200, content_type="application.json")
-    #     else:
-    #         rsp = Response("NOT FOUND", status=404, content_type="text/plain")
     else:
         result = ColumbiaStudentResource.delete_by_key(uni)
         if result > 0:
