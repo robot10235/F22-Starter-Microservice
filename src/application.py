@@ -28,7 +28,7 @@ def get_health():
     return result
 
 
-@app.route("/api/students/<uni>", methods=["GET", "POST", "DELETE"])
+@app.route("/api/students/<uni>", methods=["GET", "PUT", "DELETE"])
 def get_student_by_uni(uni):
     if request.method == "GET":
         result = ColumbiaStudentResource.get_by_key(uni)
